@@ -1,0 +1,49 @@
+version: "3.8"
+
+services:
+  backend:
+    build: https://github.com/mattdeba/weight-tracker-api.git
+    container_name: nestjs-back
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_HOST: db
+      DATABASE_PORT: 5432
+      DATABASE_USER: postgres
+      DATABASE_PASSWORD: postgres
+      DATABASE_NAME: myapp
+    depends_on:
+      - db
+    networks:
+      - mynet
+
+  frontend:
+    build: https://github.com/mattdeba/weight-tracker.git
+    container_name: angular-front
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+    networks:
+      - mynet
+
+  db:
+    image: postgres:15-alpine
+    container_name: postgres-db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: myapp
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - mynet
+
+networks:
+  mynet:
+
+volumes:
+  db_data:
