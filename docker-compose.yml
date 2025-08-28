@@ -21,7 +21,7 @@ services:
     build: https://github.com/mattdeba/weight-tracker.git
     container_name: angular-front
     ports:
-      - "8080:80"
+      - "80:80"
     depends_on:
       - backend
     networks:
